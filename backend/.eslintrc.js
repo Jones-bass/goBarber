@@ -15,5 +15,5 @@ module.exports = {
     'class-methods-use-this': 'off',
     '@typescript-eslint/camelcase': 'off',
     'no-useless-constructor': 'off',
-  },
+  }
 };
