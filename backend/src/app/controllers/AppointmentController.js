@@ -1,8 +1,10 @@
-import { isBefore, parseISO, startOfHour } from 'date-fns';
+import { format, isBefore, parseISO, startOfHour } from 'date-fns';
 import * as Yup from 'yup';
+import { pt } from 'date-fns/locale';
 import User from '../models/User';
 import Appointment from '../models/Appointment';
 import File from '../models/File';
+import Notification from '../schemas/Notification';
 
 class AppointmentController {
   async index(req, res) {
@@ -63,6 +65,7 @@ class AppointmentController {
 
     const checkAvailabilty = await Appointment.findOne({
       where: {
+        // eslint-disable-next-line camelcase
         provider_id,
         canceled_at: null,
         date: hourStart,
@@ -77,8 +80,22 @@ class AppointmentController {
 
     const appointment = await Appointment.create({
       user_id: req.userId,
+      // eslint-disable-next-line camelcase
       provider_id,
-      date: hourStart,
+      date,
+    });
+
+    const user = await User.findByPk(req.userId);
+    const formattedDate = format(
+      hourStart,
+      "'dia' dd 'de' MMMM', às' H:mn'h'",
+      { locale: pt }
+    );
+
+    await Notification.create({
+      content: `Novo agendamento de ${user.name} para ${formattedDate}`,
+      // eslint-disable-next-line camelcase
+      user: provider_id,
     });
 
     return res.json(appointment);
