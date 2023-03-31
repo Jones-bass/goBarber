@@ -1,5 +1,5 @@
-import { isEqual } from "date-fns";
-import Appointment from "../models/Appointment";
+import { isEqual } from 'date-fns'
+import Appointment from '../models/Appointment'
 
 // Data Transfer Object
 
@@ -9,26 +9,26 @@ interface CreateAppointmentDTO {
 }
 
 class AppointmentsRepository {
-  private appointments: Appointment[];
+  private appointments: Appointment[]
 
   constructor() {
-    this.appointments = [];
+    this.appointments = []
   }
 
   public all(): Appointment[] {
-    return this.appointments;
+    return this.appointments
   }
 
   public findByDate(date: Date): Appointment | null {
-    const findAppointment = this.appointments.find(appointment => 
-    isEqual(date, appointment.date)
-    );
+    const findAppointment = this.appointments.find((appointment) =>
+      isEqual(date, appointment.date),
+    )
 
-    return findAppointment || null;
+    return findAppointment || null
   }
 
-  public create({date, provider}: CreateAppointmentDTO): Appointment {
-    const appointment = new Appointment(provider, date);
+  public create({ date, provider }: CreateAppointmentDTO): Appointment {
+    const appointment = new Appointment(provider, date)
 
     this.appointments.push(appointment)
 
