@@ -47,53 +47,17 @@ export const AnimationContainer = styled.div`
     h1 {
       margin-bottom: 24px;
     }
+  }
 
-    input {
-      background: #232129;
-      border-radius: 10px;
-      padding: 16px;
-      width: 100%;
+  a {
+    color: ${(props) => props.theme.white100};
+    display: block;
+    margin-top: 24px;
+    text-decoration: none;
+    transition: color 0.2s;
 
-      border: 2px solid #232129;
-      color: ${(props) => props.theme.gray200};
-
-      display: flex;
-      align-items: center;
-
-      & + input {
-        margin-top: 8px;
-      }
-    }
-
-    button {
-      background: ${(props) => props.theme.orange};
-      height: 56px;
-      border-radius: 10px;
-      border: 0;
-      padding: 0 16px;
-      color: #312e38;
-      width: 100%;
-      font-weight: 500;
-      margin-top: 16px;
-      transition: background-color 0.2s;
-      border: none;
-      cursor: pointer;
-
-      :hover {
-        background-color: ${(props) => props.theme.orange100};
-      }
-    }
-
-    a {
-      color: ${(props) => props.theme.white100};
-      display: block;
-      margin-top: 24px;
-      text-decoration: none;
-      transition: color 0.2s;
-
-      :hover {
-        color: ${(props) => props.theme.white300};
-      }
+    :hover {
+      color: ${(props) => props.theme.white300};
     }
   }
 
