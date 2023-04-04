@@ -4,6 +4,7 @@ export const defaultTheme = {
   white300: '#B5B0AC',
 
   black: '#333',
+  black100: '#232129',
   gray200: '#666',
   gray100: '#999',
 

@@ -1,13 +1,13 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  background: #232129;
+  background: ${(props) => props.theme.black100};
   border-radius: 10px;
   padding: 16px;
   width: 100%;
 
-  border: 2px solid #232129;
-  color: #666360;
+  border: 2px solid ${(props) => props.theme.black100};
+  color: ${(props) => props.theme.gray200};
 
   display: flex;
   align-items: center;
@@ -20,11 +20,11 @@ export const Container = styled.div`
     flex: 1;
     background: transparent;
     border: none;
-    color: #f4ede8;
+    color: ${(props) => props.theme.white100};
     padding: 5px;
 
     &::placeholder {
-      color: #666360;
+      color: ${(props) => props.theme.gray200};
     }
 
     &:focus {
