@@ -6,13 +6,9 @@
     "rootDir": "./src",
     "strict": true,
     "strictPropertyInitialization": false,
-    "baseUrl": "./src",
     "allowJs": true,
-    "paths": {
-      "@modules/*": ["modules/*"],
-      "@config/*": ["config/*"],
-      "@shared/*": ["shared/*"]
-    },
+
+
     "typeRoots": [
       "./src/@types",
       "./node_modules/@types"
