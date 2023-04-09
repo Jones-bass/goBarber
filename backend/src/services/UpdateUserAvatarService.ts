@@ -4,6 +4,7 @@ import uploadConfig from '../config/upload'
 import User from '../models/User'
 import fs from 'fs/promises' // Importa a API de promessas do módulo 'fs'
 import path from 'path'
+import AppError from '../errors/AppError'
 
 interface RequestDTO {
   user_id: string
@@ -17,7 +18,7 @@ class UpdateUserAvatarService {
     const user = await usersRepository.findOne(user_id) // Obtém o usuário do banco de dados com o ID fornecido
 
     if (!user) {
-      throw new Error('Only authenticated users can change avatar.') // Lança um erro se o usuário não for encontrado
+      throw new AppError('Only authenticated users can change avatar.', 401) // Lança um erro se o usuário não for encontrado
     }
 
     if (user.avatar) {
