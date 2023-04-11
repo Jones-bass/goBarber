@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import Tooltip from '../Tooltip'
 
 export const Container = styled.div`
   background: ${(props) => props.theme.black100};
@@ -28,11 +29,27 @@ export const Container = styled.div`
     }
 
     &:focus {
-      border: 100px;
+      outline: none;
     }
   }
 
   svg {
     margin-right: 16px;
+  }
+`
+export const ErrosText = styled(Tooltip)`
+  height: 20px;
+
+  svg {
+    margin: 0px;
+  }
+
+  span {
+    background: #c53030;
+    color: #fff;
+
+    &::before {
+      border-color: #c53030 transparent;
+    }
   }
 `
