@@ -10,6 +10,7 @@ import Button from '../../components/Button'
 import Input from '../../components/Input'
 
 import { Container, Content, AnimationContainer, Background } from './styles'
+import { useAuth } from '../../hooks/auth'
 
 const createUserSchema = z.object({
   email: z
@@ -34,6 +35,8 @@ const createUserSchema = z.object({
 type CreateUserData = z.infer<typeof createUserSchema>
 
 export function SignIn() {
+  const { signIn } = useAuth()
+
   const createUserForm = useForm<CreateUserData>({
     resolver: zodResolver(createUserSchema),
   })
@@ -43,8 +46,8 @@ export function SignIn() {
     formState: { errors, isSubmitting },
   } = createUserForm
 
-  function handleOnSubmit(data: CreateUserData) {
-    console.log(data)
+  const handleOnSubmit = async (data: CreateUserData) => {
+    signIn(data)
   }
 
   return (
