@@ -13,9 +13,9 @@ sessionsRouter.post('/', async (request, response) => {
     password,
   })
 
-  const { password: _, ...userWithoutPassword } = user // Using object destructuring to remove 'password' property
+  const { password: _, ...users } = user // Using object destructuring to remove 'password' property
 
-  return response.json({ userWithoutPassword, token })
+  return response.json({ users, token })
 })
 
 export default sessionsRouter

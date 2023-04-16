@@ -1,16 +1,9 @@
 import React, { useCallback, useContext, createContext, useState } from 'react'
 import { api } from '../services/api'
 
-interface User {
-  id: string
-  name: string
-  email: string
-  avatar_url: string
-}
-
 interface AuthState {
   token: string
-  user: User
+  users: object
 }
 
 interface SignInCredentials {
@@ -19,7 +12,7 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  user: User
+  users: object
   signOut(): void
   signIn(credentials: SignInCredentials): Promise<void>
 }
@@ -32,38 +25,31 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 export const AuthProvider = ({ children }: IAuthContextData) => {
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@GoBarber:token')
-    const user = localStorage.getItem('@GoBarber:user')
-
-    if (token && user) {
-      api.defaults.headers.authorization = `Bearer ${token}`
-      return { token, user: JSON.parse(user) }
+    const usersString = localStorage.getItem('@GoBarber:users') // Fix the key here
+    if (token && usersString) {
+      const users = JSON.parse(usersString)
+      return { token, users }
     }
-
     return {} as AuthState
   })
 
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     const response = await api.post('sessions', { email, password })
-    console.log(response.data)
-
-    const { token, user } = response.data
+    const { token, users } = response.data
     localStorage.setItem('@GoBarber:token', token)
-    localStorage.setItem('@GoBarber:user', JSON.stringify(user))
-
-    api.defaults.headers.authorization = `Bearer ${token}`
-
-    setData({ token, user })
+    localStorage.setItem('@GoBarber:users', JSON.stringify(users))
+    setData({ token, users })
   }, [])
 
   const signOut = useCallback(() => {
     localStorage.removeItem('@GoBarber:token')
-    localStorage.removeItem('@GoBarber:user')
+    localStorage.removeItem('@GoBarber:users')
 
     setData({} as AuthState)
   }, [])
 
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
+    <AuthContext.Provider value={{ users: data.users, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )

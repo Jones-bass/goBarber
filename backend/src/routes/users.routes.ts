@@ -22,9 +22,9 @@ usersRouter.post('/', async (request, response) => {
       password,
     })
 
-    const { password: _, ...userWithoutPassword } = user // Using object destructuring to remove 'password' property
+    const { password: _, ...users } = user // Using object destructuring to remove 'password' property
 
-    return response.json(userWithoutPassword)
+    return response.json(users)
   } catch (err) {
     return response.status(400).json({ error: 'Email address already used.' })
   }

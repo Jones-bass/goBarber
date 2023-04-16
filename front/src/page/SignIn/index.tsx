@@ -11,6 +11,9 @@ import Input from '../../components/Input'
 
 import { Container, Content, AnimationContainer, Background } from './styles'
 import { useAuth } from '../../hooks/auth'
+import { toast } from 'react-toastify'
+import { Link, useNavigate } from 'react-router-dom'
+import { useCallback } from 'react'
 
 const createUserSchema = z.object({
   email: z
@@ -35,6 +38,7 @@ const createUserSchema = z.object({
 type CreateUserData = z.infer<typeof createUserSchema>
 
 export function SignIn() {
+  const navigate = useNavigate()
   const { signIn } = useAuth()
 
   const createUserForm = useForm<CreateUserData>({
@@ -46,9 +50,21 @@ export function SignIn() {
     formState: { errors, isSubmitting },
   } = createUserForm
 
-  const handleOnSubmit = async (data: CreateUserData) => {
-    signIn(data)
-  }
+  const handleOnSubmit = useCallback(
+    async (data: CreateUserData) => {
+      try {
+        await signIn({ ...data })
+
+        navigate('/cadastro')
+        if (data !== undefined) {
+          toast.success('Usuário Logado.')
+        }
+      } catch {
+        toast.error('Ocorreu um erro ao fazer login, cheque as credenciais.')
+      }
+    },
+    [signIn, navigate],
+  )
 
   return (
     <Container>
@@ -81,10 +97,10 @@ export function SignIn() {
             </form>
           </FormProvider>
 
-          <a href="#">
+          <Link to="/cadastro">
             <FiLogIn />
             Criar conta
-          </a>
+          </Link>
         </AnimationContainer>
       </Content>
       <Background />

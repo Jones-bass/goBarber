@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, FormProvider } from 'react-hook-form'
 
 import { Container, Content, AnimationContainer, Background } from './styles'
+import { Link } from 'react-router-dom'
 
 const createUserSchema = z.object({
   name: z
@@ -100,10 +101,10 @@ export function SignUp() {
             </form>
           </FormProvider>
 
-          <a href="#">
+          <Link to="/">
             <FiArrowLeft />
             Voltar para logon
-          </a>
+          </Link>
         </AnimationContainer>
       </Content>
     </Container>
