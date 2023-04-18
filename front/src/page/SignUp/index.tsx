@@ -10,7 +10,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, FormProvider } from 'react-hook-form'
 
 import { Container, Content, AnimationContainer, Background } from './styles'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { api } from '../../services/api'
+import { useCallback } from 'react'
+import { toast } from 'react-toastify'
 
 const createUserSchema = z.object({
   name: z
@@ -52,6 +55,7 @@ const createUserSchema = z.object({
 type CreateUserData = z.infer<typeof createUserSchema>
 
 export function SignUp() {
+  const navigate = useNavigate()
   const createUserForm = useForm<CreateUserData>({
     resolver: zodResolver(createUserSchema),
   })
@@ -61,9 +65,21 @@ export function SignUp() {
     formState: { errors, isSubmitting },
   } = createUserForm
 
-  function handleOnSubmit(data: CreateUserData) {
-    console.log(data)
-  }
+  const handleOnSubmit = useCallback(
+    async (data: CreateUserData) => {
+      try {
+        await api.post('users', data)
+
+        navigate('/')
+        toast.success('Usuário cadastrado com Sucesso.')
+      } catch {
+        toast.error('Ocorreu um erro ao se cadastrar, tente novamente!')
+      }
+    },
+
+    [navigate],
+  )
+
   return (
     <Container>
       <Background />

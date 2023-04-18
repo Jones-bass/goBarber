@@ -55,7 +55,7 @@ export function SignIn() {
       try {
         await signIn({ ...data })
 
-        navigate('/cadastro')
+        navigate('/dashboard')
         if (data !== undefined) {
           toast.success('Usuário Logado.')
         }
@@ -63,6 +63,7 @@ export function SignIn() {
         toast.error('Ocorreu um erro ao fazer login, cheque as credenciais.')
       }
     },
+
     [signIn, navigate],
   )
 

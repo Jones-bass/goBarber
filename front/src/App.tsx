@@ -1,10 +1,12 @@
-import { ThemeProvider } from 'styled-components'
+import { BrowserRouter } from 'react-router-dom'
 
+import { ThemeProvider } from 'styled-components'
 import { defaultTheme } from './styles/themes/default'
 import { GlobalStyle } from './styles/themes/global'
+
 import { AuthProvider } from './hooks/auth'
-import { BrowserRouter } from 'react-router-dom'
-import { Router } from './Router'
+import { Router } from './Route'
+
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
