@@ -11,7 +11,12 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon: React.ComponentType<IconBaseProps>
 }
 
-const Input = ({ errorMessage, name, icon: Icon, ...rest }: InputProps) => {
+export const Input = ({
+  errorMessage,
+  name,
+  icon: Icon,
+  ...rest
+}: InputProps) => {
   const { register } = useFormContext()
 
   return (
@@ -26,5 +31,3 @@ const Input = ({ errorMessage, name, icon: Icon, ...rest }: InputProps) => {
     </Container>
   )
 }
-
-export default Input

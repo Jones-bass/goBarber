@@ -1,16 +1,17 @@
-import { FiLogIn, FiMail, FiLock } from 'react-icons/fi'
+import { useCallback } from 'react'
+import { FiLogIn, FiMail } from 'react-icons/fi'
 
-import logo from '../../assets/logo1.svg'
+import { Link, useNavigate } from 'react-router-dom'
+
+import logo from '../../assets/logo.svg'
+
+import { Container, Content, AnimationContainer, Background } from './styles'
+import { toast } from 'react-toastify'
+import { api } from '../../services/api'
 
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, FormProvider } from 'react-hook-form'
-
-import { Container, Content, AnimationContainer, Background } from './styles'
-import { useAuth } from '../../hooks/auth'
-import { toast } from 'react-toastify'
-import { Link, useNavigate } from 'react-router-dom'
-import { useCallback } from 'react'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
 
@@ -36,9 +37,8 @@ const createUserSchema = z.object({
 
 type CreateUserData = z.infer<typeof createUserSchema>
 
-export function SignIn() {
+export const ForgotPassword = () => {
   const navigate = useNavigate()
-  const { signIn } = useAuth()
 
   const createUserForm = useForm<CreateUserData>({
     resolver: zodResolver(createUserSchema),
@@ -46,24 +46,22 @@ export function SignIn() {
 
   const {
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = createUserForm
 
   const handleOnSubmit = useCallback(
     async (data: CreateUserData) => {
       try {
-        await signIn({ ...data })
+        await api.post('/password/forgot', { ...data })
 
-        navigate('/dashboard')
-        if (data !== undefined) {
-          toast.success('Usuário Logado.')
-        }
+        navigate('/')
+        toast.success('Usuário cadastrado com Sucesso.')
       } catch {
-        toast.error('Ocorreu um erro ao fazer login, cheque as credenciais.')
+        toast.error('Ocorreu um erro ao se cadastrar, tente novamente!')
       }
     },
 
-    [signIn, navigate],
+    [navigate],
   )
 
   return (
@@ -74,7 +72,7 @@ export function SignIn() {
 
           <FormProvider {...createUserForm}>
             <form onSubmit={handleSubmit(handleOnSubmit)}>
-              <h1>Faça seu logon</h1>
+              <h1>Recuperar senha</h1>
 
               <Input
                 name="email"
@@ -82,24 +80,14 @@ export function SignIn() {
                 icon={FiMail}
                 errorMessage={errors?.email?.message ?? ''}
               />
-              <Input
-                name="password"
-                type="password"
-                placeholder="Senha"
-                icon={FiLock}
-                errorMessage={errors?.password?.message ?? ''}
-              />
-              <Button disabled={isSubmitting} type="submit">
-                Entrar
-              </Button>
 
-              <a href="#">Esqueci minha senha</a>
+              <Button type="submit">Recuperar senha</Button>
             </form>
           </FormProvider>
 
-          <Link to="/cadastro">
+          <Link to="/">
             <FiLogIn />
-            Criar conta
+            Voltar
           </Link>
         </AnimationContainer>
       </Content>
