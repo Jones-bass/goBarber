@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 import { getRepository } from 'typeorm'
-import uploadConfig from '../config/upload'
-import User from '../models/User'
+import uploadConfig from '../../../config/upload'
 import fs from 'fs/promises' // Importa a API de promessas do módulo 'fs'
 import path from 'path'
-import AppError from '../errors/AppError'
+import User from '../infra/typeorm/entities/User'
+import AppError from '../../../shared/errors/AppError'
 
 interface RequestDTO {
   user_id: string

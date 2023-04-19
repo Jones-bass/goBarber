@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 import { startOfDay } from 'date-fns'
 import { getCustomRepository } from 'typeorm'
-import Appointment from '../models/Appointment'
-import AppointmentsRepository from '../repositories/AppointmentsRepository'
-import AppError from '../errors/AppError'
+import AppointmentsRepository from '../infra/typeorm/repositories/AppointmentsRepository'
+import Appointment from '../infra/typeorm/entities/Appointment'
+import AppError from '../../../shared/errors/AppError'
 
 interface RequestDTO {
   provider_id: string
