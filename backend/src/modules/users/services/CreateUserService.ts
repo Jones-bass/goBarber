@@ -1,7 +1,8 @@
-import { getRepository } from 'typeorm'
+/* eslint-disable no-useless-constructor */
 import { hash } from 'bcryptjs'
 import User from '../infra/typeorm/entities/User'
 import AppError from '../../../shared/errors/AppError'
+import IUsersRepository from '../repositories/IUsersRepository'
 
 interface Request {
   name: string
@@ -10,12 +11,10 @@ interface Request {
 }
 
 class CreateUserService {
-  public async execute({ name, email, password }: Request): Promise<User> {
-    const usersRespository = getRepository(User)
+  constructor(private usersRepository: IUsersRepository) {}
 
-    const checkUserExists = await usersRespository.findOne({
-      where: { email },
-    })
+  public async execute({ name, email, password }: Request): Promise<User> {
+    const checkUserExists = await this.usersRepository.findByEmail(email)
 
     if (checkUserExists) {
       throw new AppError('Email address already used.')
@@ -23,13 +22,11 @@ class CreateUserService {
 
     const hashedPassword = await hash(password, 8)
 
-    const user = usersRespository.create({
+    const user = this.usersRepository.create({
       name,
       email,
       password: hashedPassword,
     })
-
-    await usersRespository.save(user)
 
     return user
   }

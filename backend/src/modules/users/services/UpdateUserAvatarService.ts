@@ -1,10 +1,11 @@
+/* eslint-disable no-useless-constructor */
 /* eslint-disable camelcase */
-import { getRepository } from 'typeorm'
 import uploadConfig from '../../../config/upload'
 import fs from 'fs/promises' // Importa a API de promessas do módulo 'fs'
 import path from 'path'
 import User from '../infra/typeorm/entities/User'
 import AppError from '../../../shared/errors/AppError'
+import IUsersRepository from '../repositories/IUsersRepository'
 
 interface RequestDTO {
   user_id: string
@@ -12,10 +13,10 @@ interface RequestDTO {
 }
 
 class UpdateUserAvatarService {
-  public async execute({ user_id, avatarFilename }: RequestDTO): Promise<User> {
-    const usersRepository = getRepository(User) // Obtém o repositório de usuários do TypeORM
+  constructor(private usersRepository: IUsersRepository) {}
 
-    const user = await usersRepository.findOne(user_id) // Obtém o usuário do banco de dados com o ID fornecido
+  public async execute({ user_id, avatarFilename }: RequestDTO): Promise<User> {
+    const user = await this.usersRepository.findById(user_id) // Obtém o usuário do banco de dados com o ID fornecido
 
     if (!user) {
       throw new AppError('Only authenticated users can change avatar.', 401) // Lança um erro se o usuário não for encontrado
@@ -34,7 +35,7 @@ class UpdateUserAvatarService {
 
     user.avatar = avatarFilename as string // Atualiza o nome do arquivo de avatar do usuário com o nome fornecido
 
-    await usersRepository.save(user) // Salva a atualização no banco de dados
+    await this.usersRepository.save(user) // Salva a atualização no banco de dados
 
     return user // Retorna o usuário atualizado
   }
