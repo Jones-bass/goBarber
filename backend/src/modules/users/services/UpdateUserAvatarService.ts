@@ -1,11 +1,9 @@
 /* eslint-disable no-useless-constructor */
 /* eslint-disable camelcase */
-import uploadConfig from '../../../config/upload'
-import fs from 'fs/promises' // Importa a API de promessas do módulo 'fs'
-import path from 'path'
 import User from '../infra/typeorm/entities/User'
 import AppError from '../../../shared/errors/AppError'
 import IUsersRepository from '../repositories/IUsersRepository'
+import IStorageProvider from '../../../shared/providers/StorageProvider/models/IStorageProvider'
 
 interface RequestDTO {
   user_id: string
@@ -13,7 +11,10 @@ interface RequestDTO {
 }
 
 class UpdateUserAvatarService {
-  constructor(private usersRepository: IUsersRepository) {}
+  constructor(
+    private usersRepository: IUsersRepository,
+    private storageProvider: IStorageProvider,
+  ) {}
 
   public async execute({ user_id, avatarFilename }: RequestDTO): Promise<User> {
     const user = await this.usersRepository.findById(user_id) // Obtém o usuário do banco de dados com o ID fornecido
@@ -23,19 +24,14 @@ class UpdateUserAvatarService {
     }
 
     if (user.avatar) {
-      // Verifica se o usuário já possui um avatar
-      const userAvatarFilePath = path.join(uploadConfig.directory, user.avatar) // Obtém o caminho completo do arquivo de avatar do usuário
-      const userAvatarFileExists = await fs.stat(userAvatarFilePath) // Verifica se o arquivo existe
-
-      if (userAvatarFileExists) {
-        // Se o arquivo existe, remove-o
-        await fs.unlink(userAvatarFilePath)
-      }
+      await this.storageProvider.deleteFile(user.avatar)
     }
 
-    user.avatar = avatarFilename as string // Atualiza o nome do arquivo de avatar do usuário com o nome fornecido
+    await this.storageProvider.saveFile(avatarFilename!)
 
-    await this.usersRepository.save(user) // Salva a atualização no banco de dados
+    user.avatar = avatarFilename!
+
+    await this.usersRepository.save(user)
 
     return user // Retorna o usuário atualizado
   }
