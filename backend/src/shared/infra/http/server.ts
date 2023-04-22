@@ -10,7 +10,7 @@ import cors from 'cors'
 import routes from './routes'
 import AppError from '../../errors/AppError'
 
-import '../typeorm'
+import '../typeorm/index'
 
 const app = express()
 
