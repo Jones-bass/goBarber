@@ -4,6 +4,7 @@ import React from 'react'
 import { SignIn } from './page/SignIn'
 import { SignUp } from './page/SignUp'
 import { Dashboard } from './page/Dashboard'
+import { ResetPassword } from './page/ResetPassword'
 
 interface PrivateProps {
   children?: React.ReactNode
@@ -24,6 +25,8 @@ export function Router() {
     <Routes>
       <Route path="/" element={<SignIn />} />
       <Route path="/cadastro" element={<SignUp />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+
       <Route
         path="/dashboard"
         element={
