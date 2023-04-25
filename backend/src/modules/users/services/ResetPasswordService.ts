@@ -6,7 +6,7 @@ import IUsersRepository from '../repositories/IUsersRepository'
 import IUserTokensRepository from '../repositories/IUserTokensRepository'
 
 interface IRequest {
-  email: string
+  token: string
   password: string
 }
 
@@ -17,8 +17,8 @@ class ResetPasswordService {
     private hashProvider: IHashProvider,
   ) {}
 
-  public async execute({ email, password }: IRequest): Promise<void> {
-    const userToken = await this.userTokensRepository.findByToken(email)
+  public async execute({ token, password }: IRequest): Promise<void> {
+    const userToken = await this.userTokensRepository.findByToken(token)
 
     if (!userToken) {
       throw new AppError('User does not exists!.')
