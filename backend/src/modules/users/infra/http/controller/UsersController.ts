@@ -15,8 +15,8 @@ export default class UsersController {
       password,
     })
 
-    const { password: _, ...users } = user // Using object destructuring to remove 'password' property
+    delete (user as { password?: string }).password
 
-    return response.json(users)
+    return response.json(user)
   }
 }
