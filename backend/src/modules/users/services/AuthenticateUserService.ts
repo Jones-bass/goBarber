@@ -1,5 +1,6 @@
 /* eslint-disable no-useless-constructor */
 import { sign } from 'jsonwebtoken'
+import { injectable, inject } from 'tsyringe'
 
 import auth from '../../../config/auth'
 import User from '../infra/typeorm/entities/User'
@@ -17,9 +18,13 @@ interface Response {
   token: string
 }
 
+@injectable()
 class AuthenticateUserService {
   constructor(
+    @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('HashProvider')
     private hashProvider: IHashProvider,
   ) {}
 

@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import { getRepository, Repository } from 'typeorm'
 
-import IUserTokensRepository from '../../../repositories/IUserTokensRepository'
+import IUsersTokensRepository from '../../../repositories/IUsersTokensRepository'
 
 import UserToken from '../entities/UserToken'
 
-class UsersTokensRepository implements IUserTokensRepository {
+class UsersTokensRepository implements IUsersTokensRepository {
   private ormRepository: Repository<UserToken>
 
   constructor() {

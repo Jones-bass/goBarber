@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import UsersRepository from '../../typeorm/repositories/UsersRepository'
 import UpdateUserAvatarService from '../../../services/UpdateUserAvatarService'
-import DiskStorageProvider from '../../../../../shared/providers/StorageProvider/implementations/DiskStorageProvider'
+import DiskStorageProvider from '../../../../../shared/container/providers/StorageProvider/implementations/DiskStorageProvider'
 
 export default class UserAvatarController {
   public async update(request: Request, response: Response): Promise<Response> {

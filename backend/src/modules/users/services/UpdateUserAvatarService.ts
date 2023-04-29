@@ -1,18 +1,23 @@
 /* eslint-disable no-useless-constructor */
 /* eslint-disable camelcase */
+import { injectable, inject } from 'tsyringe'
 import User from '../infra/typeorm/entities/User'
 import AppError from '../../../shared/errors/AppError'
 import IUsersRepository from '../repositories/IUsersRepository'
-import IStorageProvider from '../../../shared/providers/StorageProvider/models/IStorageProvider'
+import IStorageProvider from '../../../shared/container/providers/StorageProvider/models/IStorageProvider'
 
 interface RequestDTO {
   user_id: string
   avatarFilename: string | undefined
 }
 
+@injectable()
 class UpdateUserAvatarService {
   constructor(
+    @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('StorageProvider')
     private storageProvider: IStorageProvider,
   ) {}
 

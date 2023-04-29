@@ -1,19 +1,27 @@
 /* eslint-disable no-useless-constructor */
 import { addHours, isAfter } from 'date-fns'
+import { injectable, inject } from 'tsyringe'
+
 import AppError from '../../../shared/errors/AppError'
 import IHashProvider from '../providers/HashProvider/models/IHashProvider'
 import IUsersRepository from '../repositories/IUsersRepository'
-import IUserTokensRepository from '../repositories/IUserTokensRepository'
+import IUsersTokensRepository from '../repositories/IUsersTokensRepository'
 
 interface IRequest {
   token: string
   password: string
 }
 
+@injectable()
 class ResetPasswordService {
   constructor(
+    @inject('UsersRepository')
     private usersRepository: IUsersRepository,
-    private userTokensRepository: IUserTokensRepository,
+
+    @inject('UserTokensRepository')
+    private userTokensRepository: IUsersTokensRepository,
+
+    @inject('HashProvider')
     private hashProvider: IHashProvider,
   ) {}
 
