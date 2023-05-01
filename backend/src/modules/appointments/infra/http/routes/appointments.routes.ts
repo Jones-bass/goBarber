@@ -2,18 +2,17 @@
 import { Router } from 'express'
 
 import ensureAuthenticated from '../../../../users/infra/http/middlewares/ensureAuthenticated'
+import AppointmentsController from '../controller/AppointmentsController'
+import ProviderAppointmentsController from '../controller/ProviderAppointmentsController'
 
 const appointmentsRouter = Router()
 
-appointmentsRouter.use(ensureAuthenticated)
-/*
-appointmentsRouter.get('/', async (request, response) => {
-  console.log(request.user)
-  const appointmentRepository = getCustomRepository(AppointmentsRepository)
-  const appointments = await appointmentRepository.find()
+const appointmentsController = new AppointmentsController()
+const providerAppointmentsController = new ProviderAppointmentsController()
 
-  return response.json(appointments)
-})
-*/
+appointmentsRouter.use(ensureAuthenticated)
+
+appointmentsRouter.post('/', appointmentsController.create)
+appointmentsRouter.get('/schedule', providerAppointmentsController.index)
 
 export default appointmentsRouter
