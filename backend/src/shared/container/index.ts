@@ -3,14 +3,17 @@ import { container } from 'tsyringe'
 import './providers'
 import '../../modules/users/providers'
 
-import IUsersRepository from '../../modules/users/repositories/IUsersRepository'
 import UsersRepository from '../../modules/users/infra/typeorm/repositories/UsersRepository'
+import IUsersRepository from '../../modules/users/repositories/IUsersRepository'
 
-import IAppointmentsRepository from '../../modules/appointments/repositories/IAppointmentsRepository'
 import AppointmentsRepository from '../../modules/appointments/infra/typeorm/repositories/AppointmentsRepository'
+import IAppointmentsRepository from '../../modules/appointments/repositories/IAppointmentsRepository'
 
 import UsersTokensRepository from '../../modules/users/infra/typeorm/repositories/UserTokensRepository'
 import IUsersTokensRepository from '../../modules/users/repositories/IUsersTokensRepository'
+
+import NotificationsRepository from '../../modules/notifications/infra/typeorm/repositories/NotificationsRepository'
+import INotificationsRepository from '../../modules/notifications/repositories/INotificationsRepository'
 
 container.registerSingleton<IAppointmentsRepository>(
   'AppointmentsRepository',
@@ -25,4 +28,9 @@ container.registerSingleton<IUsersRepository>(
 container.registerSingleton<IUsersTokensRepository>(
   'UserTokensRepository',
   UsersTokensRepository,
+)
+
+container.registerSingleton<INotificationsRepository>(
+  'NotificationsRepository',
+  NotificationsRepository,
 )
