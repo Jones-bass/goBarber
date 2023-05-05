@@ -4,7 +4,6 @@ import uploadConfig from '../../../../../config/upload'
 import ensureAuthenticated from '../middlewares/ensureAuthenticated'
 import UsersController from '../controller/UsersController'
 import UserAvatarController from '../controller/UserAvatarController'
-import { celebrate, Joi, Segments } from 'celebrate'
 
 const usersRouter = Router()
 
@@ -13,18 +12,7 @@ const userAvatarController = new UserAvatarController()
 
 const upload = multer(uploadConfig)
 
-usersRouter.post(
-  '/',
-  celebrate({
-    [Segments.BODY]: {
-      name: Joi.string().required(),
-      email: Joi.string().email().required(),
-      password: Joi.string().required(),
-    },
-  }),
-
-  usersController.create,
-)
+usersRouter.post('/', usersController.create)
 
 usersRouter.patch(
   '/avatar',

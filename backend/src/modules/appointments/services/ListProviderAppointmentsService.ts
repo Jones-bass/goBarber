@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-useless-constructor */
 
+import { classToClass } from 'class-transformer'
 import { injectable, inject } from 'tsyringe'
 import Appointment from '../../appointments/infra/typeorm/entities/Appointment'
 import IAppointmentsRepository from '../../appointments/repositories/IAppointmentsRepository'
@@ -33,7 +34,7 @@ class ListProvidersAppointmentsService {
         year,
       })
 
-    return appointments
+    return classToClass(appointments)
   }
 }
 

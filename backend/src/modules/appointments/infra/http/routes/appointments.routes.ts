@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import { celebrate, Joi, Segments } from 'celebrate'
 import { Router } from 'express'
 
 import ensureAuthenticated from '../../../../users/infra/http/middlewares/ensureAuthenticated'
@@ -13,16 +12,7 @@ const providerAppointmentsController = new ProviderAppointmentsController()
 
 appointmentsRouter.use(ensureAuthenticated)
 
-appointmentsRouter.post(
-  '/',
-  celebrate({
-    [Segments.BODY]: {
-      provider_id: Joi.string().uuid().required(),
-      date: Joi.date(),
-    },
-  }),
-  appointmentsController.create,
-)
+appointmentsRouter.post('/', appointmentsController.create)
 appointmentsRouter.get('/schedule', providerAppointmentsController.index)
 
 export default appointmentsRouter

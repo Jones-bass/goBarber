@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { Request, Response } from 'express'
 import { container } from 'tsyringe'
-import ListProvidersMonthAvailabilityService from '../../../../users/services/ListProviderMonthAvailabilityService'
+import ListProvidersMonthAvailabilityService from '../../../services/ListProviderMonthAvailabilityService'
 
 export default class ProviderMonthAvailabilityController {
   public async index(request: Request, response: Response): Promise<Response> {

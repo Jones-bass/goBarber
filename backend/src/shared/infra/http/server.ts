@@ -4,16 +4,15 @@ import 'dotenv/config'
 import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
 
-import uploadConfig from '../../../config/upload'
-
 import cors from 'cors'
+
+import uploadConfig from '../../../config/upload'
 
 import routes from './routes'
 import AppError from '../../errors/AppError'
 
 import '../typeorm/index'
 import '../../container/index'
-import { errors } from 'celebrate'
 
 const app = express()
 
@@ -22,8 +21,6 @@ app.use(cors())
 app.use(express.json())
 app.use('/files', express.static(uploadConfig.uploadsFolder))
 app.use(routes)
-
-app.use(errors())
 
 app.use(
   (err: Error, request: Request, response: Response, next: NextFunction) => {
