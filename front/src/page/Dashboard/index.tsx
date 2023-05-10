@@ -1,4 +1,4 @@
-import { FiPower } from 'react-icons/fi'
+import { FiClock, FiPower } from 'react-icons/fi'
 import logo from '../../assets/logo.svg'
 import { useAuth } from '../../hooks/auth'
 
@@ -10,6 +10,8 @@ import {
   Schedule,
   Section,
   Profile,
+  NextAppointment,
+  Appointment,
 } from './styles'
 import { Link } from 'react-router-dom'
 
@@ -48,12 +50,58 @@ export const Dashboard = () => {
             <span>Dia</span>
           </p>
 
+          <NextAppointment>
+            <strong>Agendamento a seguir</strong>
+            <div>
+              <img
+                src="https://avatars.githubusercontent.com/u/85463497?v=4"
+                alt="Profile avatar"
+              />
+
+              <strong>Jones Bass</strong>
+              <span>
+                <FiClock />
+                14:00
+              </span>
+            </div>
+          </NextAppointment>
+
           <Section>
             <strong>Manhã</strong>
+            <Appointment>
+              <span>
+                <FiClock />
+                09:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars.githubusercontent.com/u/85463497?v=4"
+                  alt="Profile avatar"
+                />
+
+                <strong>Jones Souza</strong>
+              </div>
+            </Appointment>
           </Section>
 
           <Section>
             <strong>Tarde</strong>
+            <Appointment>
+              <span>
+                <FiClock />
+                15:00
+              </span>
+
+              <div>
+                <img
+                  src="https://avatars.githubusercontent.com/u/85463497?v=4"
+                  alt="Profile avatar"
+                />
+
+                <strong>Jones Souza</strong>
+              </div>
+            </Appointment>
           </Section>
         </Schedule>
       </Content>

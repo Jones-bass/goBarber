@@ -108,12 +108,112 @@ export const Schedule = styled.div`
     }
   }
 `
+export const NextAppointment = styled.div`
+  margin-top: 64px;
+
+  > strong {
+    color: ${(props) => props.theme.white300};
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  div {
+    background: ${(props) => props.theme.gray};
+    padding: 16px 24px;
+    border-radius: 10px;
+    margin-top: 24px;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '';
+      position: absolute;
+      height: 80%;
+      width: 1px;
+      left: 0;
+      top: 10%;
+      background: ${(props) => props.theme.orange};
+    }
+
+    img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+
+    strong {
+      margin-left: 24px;
+      color: ${(props) => props.theme.white};
+    }
+
+    span {
+      margin-left: auto;
+      color: ${(props) => props.theme.white300};
+
+      display: flex;
+      align-items: center;
+
+      svg {
+        color: ${(props) => props.theme.orange};
+        margin-right: 8px;
+      }
+    }
+  }
+`
+
+export const Appointment = styled.div`
+  display: flex;
+  align-items: center;
+
+  & + div {
+    margin-top: 16px;
+  }
+
+  span {
+    margin-left: auto;
+    color: ${(props) => props.theme.white300};
+    width: 72px;
+
+    display: flex;
+    align-items: center;
+
+    svg {
+      color: ${(props) => props.theme.orange};
+      margin-right: 8px;
+    }
+  }
+
+  div {
+    background: ${(props) => props.theme.gray};
+    padding: 16px 24px;
+    border-radius: 10px;
+    margin-left: 24px;
+
+    display: flex;
+    align-items: center;
+    flex: 1;
+
+    img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+    }
+
+    strong {
+      margin-left: 24px;
+      color: ${(props) => props.theme.white};
+      font-size: 20px;
+    }
+  }
+`
 
 export const Section = styled.section`
   margin-top: 48px;
 
   > strong {
-    color: ${(props) => props.theme.gray100};
+    color: ${(props) => props.theme.white300};
     font-size: 20px;
     line-height: 26px;
     display: block;
@@ -123,7 +223,7 @@ export const Section = styled.section`
   }
 
   > p {
-    color: ${(props) => props.theme.gray100};
+    color: ${(props) => props.theme.gray};
     font-weight: 400;
   }
 `
