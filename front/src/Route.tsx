@@ -5,6 +5,7 @@ import { SignIn } from './page/SignIn'
 import { SignUp } from './page/SignUp'
 import { Dashboard } from './page/Dashboard'
 import { ResetPassword } from './page/ResetPassword'
+import { ForgotPassword } from './page/ForgotPassword'
 
 interface PrivateProps {
   children?: React.ReactNode
@@ -12,9 +13,9 @@ interface PrivateProps {
 
 export function Router() {
   const PrivateRoute = ({ children }: PrivateProps) => {
-    const { users } = useAuth()
+    const { user } = useAuth()
 
-    if (users) {
+    if (user) {
       return <>{children}</>
     } else {
       return <Navigate to="/" />
@@ -25,6 +26,7 @@ export function Router() {
     <Routes>
       <Route path="/" element={<SignIn />} />
       <Route path="/cadastro" element={<SignUp />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
 
       <Route

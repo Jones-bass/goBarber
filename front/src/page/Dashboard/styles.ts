@@ -27,6 +27,45 @@ export const HeaderContent = styled.div`
       color: ${(props) => props.theme.gray200};
       height: 20px;
       width: 20px;
+      cursor: pointer;
+
+      &:hover {
+        color: ${(props) => props.theme.orange};
+        opacity: 0.8;
+      }
+    }
+  }
+`
+
+export const Profile = styled.div`
+  margin-left: 80px;
+
+  display: flex;
+  align-items: center;
+
+  img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+  }
+
+  div {
+    margin-left: 16px;
+    line-height: 24px;
+
+    display: flex;
+    flex-direction: column;
+
+    span {
+      color: ${(props) => props.theme.white100};
+    }
+
+    a {
+      color: ${(props) => props.theme.orange};
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
   }
 `

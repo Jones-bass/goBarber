@@ -12,8 +12,9 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { Container, Content, AnimationContainer, Background } from './styles'
 import { Link, useNavigate } from 'react-router-dom'
 import { api } from '../../services/api'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { toast } from 'react-toastify'
+import { Loading } from '../../components/Loading'
 
 const createUserSchema = z.object({
   name: z
@@ -55,6 +56,8 @@ const createUserSchema = z.object({
 type CreateUserData = z.infer<typeof createUserSchema>
 
 export function SignUp() {
+  const [loading, setLoading] = useState(false)
+
   const navigate = useNavigate()
   const createUserForm = useForm<CreateUserData>({
     resolver: zodResolver(createUserSchema),
@@ -68,12 +71,14 @@ export function SignUp() {
   const handleOnSubmit = useCallback(
     async (data: CreateUserData) => {
       try {
+        setLoading(true)
         await api.post('users', data)
 
-        navigate('/')
+        navigate('/reset_password')
         toast.success('Usuário cadastrado com Sucesso.')
       } catch {
         toast.error('Ocorreu um erro ao se cadastrar, tente novamente!')
+        setLoading(false)
       }
     },
 
@@ -112,7 +117,7 @@ export function SignUp() {
                 errorMessage={errors?.password?.message ?? ''}
               />
               <Button disabled={isSubmitting} type="submit">
-                Cadastrar
+                {loading ? <Loading /> : 'Cadastrar'}
               </Button>
             </form>
           </FormProvider>

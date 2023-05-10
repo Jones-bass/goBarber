@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { FiLogIn, FiMail } from 'react-icons/fi'
 
 import { Link, useNavigate } from 'react-router-dom'
@@ -14,6 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, FormProvider } from 'react-hook-form'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
+import { Loading } from '../../components/Loading'
 
 const createUserSchema = z.object({
   email: z
@@ -25,19 +26,13 @@ const createUserSchema = z.object({
       message: 'Formato de e-mail inválido',
     })
     .toLowerCase(),
-  password: z
-    .string()
-    .nonempty({
-      message: 'A senha é obrigatória',
-    })
-    .min(8, {
-      message: 'A senha precisa ter no mínimo 8 caracteres',
-    }),
 })
 
 type CreateUserData = z.infer<typeof createUserSchema>
 
 export const ForgotPassword = () => {
+  const [loading, setLoading] = useState(false)
+
   const navigate = useNavigate()
 
   const createUserForm = useForm<CreateUserData>({
@@ -52,12 +47,16 @@ export const ForgotPassword = () => {
   const handleOnSubmit = useCallback(
     async (data: CreateUserData) => {
       try {
+        setLoading(true)
+
         await api.post('/password/forgot', { ...data })
 
-        navigate('/')
-        toast.success('Usuário cadastrado com Sucesso.')
+        navigate('/reset-password')
+        toast.success('E-mail de recuperação de senha enviado.')
       } catch {
-        toast.error('Ocorreu um erro ao se cadastrar, tente novamente!')
+        toast.error('Ocorreu um erro ao enviar o email, tente novamente!')
+
+        setLoading(false)
       }
     },
 
@@ -81,7 +80,9 @@ export const ForgotPassword = () => {
                 errorMessage={errors?.email?.message ?? ''}
               />
 
-              <Button type="submit">Recuperar senha</Button>
+              <Button type="submit">
+                {loading ? <Loading /> : 'Recuperar senha'}
+              </Button>
             </form>
           </FormProvider>
 

@@ -1,6 +1,7 @@
 import { ButtonHTMLAttributes } from 'react'
 
 import { Container } from './styles'
+import { Loading } from '../Loading'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean
@@ -8,6 +9,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export const Button = ({ children, loading, ...rest }: ButtonProps) => (
   <Container type="button" {...rest}>
-    {loading ? 'Carregando...' : children}
+    {loading && <Loading />}
+    {children}
   </Container>
 )

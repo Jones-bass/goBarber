@@ -10,9 +10,10 @@ import { Container, Content, AnimationContainer, Background } from './styles'
 import { useAuth } from '../../hooks/auth'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { Input } from '../../components/Input'
 import { Button } from '../../components/Button'
+import { Loading } from '../../components/Loading'
 
 const createUserSchema = z.object({
   email: z
@@ -37,6 +38,8 @@ const createUserSchema = z.object({
 type CreateUserData = z.infer<typeof createUserSchema>
 
 export function SignIn() {
+  const [loading, setLoading] = useState(false)
+
   const navigate = useNavigate()
   const { signIn } = useAuth()
 
@@ -52,14 +55,16 @@ export function SignIn() {
   const handleOnSubmit = useCallback(
     async (data: CreateUserData) => {
       try {
+        setLoading(true)
         await signIn({ ...data })
 
-        navigate('/dashboard')
+        navigate('/reset-password')
         if (data !== undefined) {
           toast.success('Usuário Logado.')
         }
       } catch {
         toast.error('Ocorreu um erro ao fazer login, cheque as credenciais.')
+        setLoading(false)
       }
     },
 
@@ -90,7 +95,7 @@ export function SignIn() {
                 errorMessage={errors?.password?.message ?? ''}
               />
               <Button disabled={isSubmitting} type="submit">
-                Entrar
+                {loading ? <Loading /> : 'Entrar'}
               </Button>
 
               <a href="#">Esqueci minha senha</a>

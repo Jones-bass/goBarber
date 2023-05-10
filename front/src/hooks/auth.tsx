@@ -1,9 +1,15 @@
 import React, { useCallback, useContext, createContext, useState } from 'react'
 import { api } from '../services/api'
 
+interface User {
+  id: string
+  avatar_url: string
+  name: string
+}
+
 interface AuthState {
   token: string
-  users: object
+  user: User
 }
 
 interface SignInCredentials {
@@ -12,7 +18,7 @@ interface SignInCredentials {
 }
 
 interface AuthContextData {
-  users: object
+  user: User
   signOut(): void
   signIn(credentials: SignInCredentials): Promise<void>
 }
@@ -25,31 +31,31 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 export const AuthProvider = ({ children }: IAuthContextData) => {
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@GoBarber:token')
-    const usersString = localStorage.getItem('@GoBarber:users') // Fix the key here
-    if (token && usersString) {
-      const users = JSON.parse(usersString)
-      return { token, users }
+    const userString = localStorage.getItem('@GoBarber:user') // Fix the key here
+    if (token && userString) {
+      const user = JSON.parse(userString)
+      return { token, user }
     }
     return {} as AuthState
   })
 
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     const response = await api.post('sessions', { email, password })
-    const { token, users } = response.data
+    const { token, user } = response.data
     localStorage.setItem('@GoBarber:token', token)
-    localStorage.setItem('@GoBarber:users', JSON.stringify(users))
-    setData({ token, users })
+    localStorage.setItem('@GoBarber:user', JSON.stringify(user))
+    setData({ token, user })
   }, [])
 
   const signOut = useCallback(() => {
     localStorage.removeItem('@GoBarber:token')
-    localStorage.removeItem('@GoBarber:users')
+    localStorage.removeItem('@GoBarber:user')
 
     setData({} as AuthState)
   }, [])
 
   return (
-    <AuthContext.Provider value={{ users: data.users, signIn, signOut }}>
+    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )

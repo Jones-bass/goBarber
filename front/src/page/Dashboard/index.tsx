@@ -1,5 +1,6 @@
 import { FiPower } from 'react-icons/fi'
 import logo from '../../assets/logo.svg'
+import { useAuth } from '../../hooks/auth'
 
 import {
   Container,
@@ -8,16 +9,31 @@ import {
   Content,
   Schedule,
   Section,
+  Profile,
 } from './styles'
+import { Link } from 'react-router-dom'
 
 export const Dashboard = () => {
+  const { user, signOut } = useAuth()
+
   return (
     <Container>
       <Header>
         <HeaderContent>
           <img src={logo} alt="GoBarber" />
 
-          <button type="button">
+          <Profile>
+            <img src={user.avatar_url} alt={user.name} />
+
+            <div>
+              <span>Bem-vindo,</span>
+              <Link to="/profile">
+                <strong>{user.name}</strong>
+              </Link>
+            </div>
+          </Profile>
+
+          <button type="button" onClick={signOut}>
             <FiPower />
           </button>
         </HeaderContent>

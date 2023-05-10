@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { FiLock } from 'react-icons/fi'
 
 import { Input } from '../../components/Input'
@@ -10,6 +11,11 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Container, Content, AnimationContainer, Background } from './styles'
+import { useState } from 'react'
+import { api } from '../../services/api'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { Loading } from '../../components/Loading'
 
 const createUserSchema = z.object({
   password: z
@@ -33,6 +39,12 @@ const createUserSchema = z.object({
 type CreateUserData = z.infer<typeof createUserSchema>
 
 export const ResetPassword = () => {
+  const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate()
+  const location = useLocation()
+  console.log(location)
+
   const createUserForm = useForm<CreateUserData>({
     resolver: zodResolver(createUserSchema),
   })
@@ -43,7 +55,29 @@ export const ResetPassword = () => {
   } = createUserForm
 
   const handleOnSubmit = async (data: CreateUserData) => {
-    console.log(data)
+    try {
+      setLoading(true)
+
+      const { password, password_confirmation } = data
+      const token = location.search.replace('?token=', '')
+
+      if (!token) {
+        throw new Error()
+      }
+
+      await api.post('/password/reset', {
+        password,
+        password_confirmation,
+        token,
+      })
+
+      navigate('/')
+      toast.success('Redefinição de senha enviada com sucesso.')
+    } catch {
+      toast.error('Ocorreu um erro ao resetar a senha, tente novamente!')
+
+      setLoading(false)
+    }
   }
 
   return (
@@ -71,7 +105,9 @@ export const ResetPassword = () => {
                 icon={FiLock}
                 errorMessage={errors?.password?.message ?? ''}
               />
-              <Button type="submit">Alterar senha</Button>
+              <Button type="submit">
+                {loading ? <Loading /> : 'Alterar senha'}
+              </Button>
             </form>
           </FormProvider>
         </AnimationContainer>
