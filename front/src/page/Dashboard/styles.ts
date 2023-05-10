@@ -227,3 +227,60 @@ export const Section = styled.section`
     font-weight: 400;
   }
 `
+
+export const Calender = styled.aside`
+  width: 380px;
+
+  .DayPicker {
+    background: ${(props) => props.theme.black100};
+    border-radius: 10px;
+  }
+
+  .DayPicker-wrapper {
+    padding-bottom: 0;
+  }
+
+  .DayPicker,
+  .DayPicker-Month {
+    width: 100%;
+  }
+
+  .DayPicker-Month {
+    border-collapse: separate;
+    border-spacing: 8px;
+    margin: 16px;
+  }
+
+  .DayPicker-Day {
+    width: 40px;
+    height: 40px;
+  }
+
+  .DayPicker-Day--available:not(.DayPicker-Day--outside) {
+    background: ${(props) => props.theme.gray};
+    border-radius: 10px;
+    color: ${(props) => props.theme.white};
+  }
+
+  .DayPicker:not(.DayPicker--interactionDisabled)
+    .DayPicker-Day:not(.DayPicker-Day--disabled):not(
+      .DayPicker-Day--selected
+    ):not(.DayPicker-Day--outside):hover {
+    background: ${(props) => props.theme.orange100};
+  }
+
+  .DayPicker-Day--today {
+    font-weight: normal;
+  }
+
+  .DayPicker-Day--disabled {
+    color: ${(props) => props.theme.gray100} !important;
+    background: transparent !important;
+  }
+
+  .DayPicker-Day--selected {
+    background: ${(props) => props.theme.orange} !important;
+    border-radius: 10px;
+    color: ${(props) => props.theme.gray100} !important;
+  }
+`

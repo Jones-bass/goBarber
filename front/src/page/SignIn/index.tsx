@@ -58,7 +58,7 @@ export function SignIn() {
         setLoading(true)
         await signIn({ ...data })
 
-        navigate('/reset-password')
+        navigate('/dashboard')
         if (data !== undefined) {
           toast.success('Usuário Logado.')
         }
