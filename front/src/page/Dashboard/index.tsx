@@ -6,8 +6,8 @@ import 'react-day-picker/lib/style.css'
 
 import {
   Container,
-  Header,
   HeaderContent,
+  Header,
   Content,
   Schedule,
   Section,
@@ -17,11 +17,34 @@ import {
   Calender,
 } from './styles'
 import { Link } from 'react-router-dom'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { api } from '../../services/api'
+import { format, isToday, parseISO } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
+
+interface MonthAvailabilityItem {
+  day: number
+  available: boolean
+}
+
+interface Appointments {
+  id: string
+  date: string
+  hourFormatted: string
+  user: {
+    name: string
+    avatar_url: string
+  }
+}
 
 export const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [monthAvailability, setMonthAvailability] = useState<
+    MonthAvailabilityItem[]
+  >([])
+
+  const [appointments, setAppointments] = useState<Appointments[]>([])
 
   const { user, signOut } = useAuth()
 
@@ -34,6 +57,64 @@ export const Dashboard = () => {
   const handleMonthChange = useCallback((month: Date) => {
     setCurrentMonth(month)
   }, [])
+
+  useEffect(() => {
+    api
+      .get(`/providers/${user.id}/month-availability`, {
+        params: {
+          year: currentMonth.getFullYear(),
+          month: currentMonth.getMonth() + 1,
+        },
+      })
+      .then((response) => {
+        setMonthAvailability(response.data)
+      })
+  }, [currentMonth, user.id])
+
+  useEffect(() => {
+    api
+      .get<Appointments[]>('/appointments/schedule', {
+        params: {
+          year: selectedDate.getFullYear(),
+          month: selectedDate.getMonth() + 1,
+          day: selectedDate.getDate(),
+        },
+      })
+      .then((response) => {
+        setAppointments(response.data)
+        console.log(response.data)
+      })
+  }, [selectedDate])
+
+  const disabledDays = useMemo(() => {
+    const dates = monthAvailability
+      .filter((monthDay) => monthDay.available === false)
+      .map((monthDay) => {
+        const year = currentMonth.getFullYear()
+        const month = currentMonth.getMonth()
+
+        return new Date(year, month, monthDay.day)
+      })
+
+    return dates
+  }, [currentMonth, monthAvailability])
+
+  const selectedDateAsText = useMemo(() => {
+    return format(
+      selectedDate,
+      "'Dia' dd 'de' MMMM",
+      {
+        locale: ptBR,
+      },
+      [selectedDate],
+    )
+  })
+
+  const selectedWeekDay = useMemo(() => {
+    return format(selectedDate, 'cccc', {
+      locale: ptBR,
+    })
+  }, [selectedDate])
 
   return (
     <Container>
@@ -62,9 +143,9 @@ export const Dashboard = () => {
         <Schedule>
           <h1>Horários agendados</h1>
           <p>
-            <span>Hoje</span>
-            <span>Data</span>
-            <span>Dia</span>
+            {isToday(selectedDate) && <span>Hoje</span>}
+            <span>{selectedDateAsText}</span>
+            <span>{selectedWeekDay}</span>
           </p>
 
           <NextAppointment>
@@ -126,7 +207,7 @@ export const Dashboard = () => {
           <DayPicker
             weekdaysShort={['D', 'S', 'T', 'Q', 'Q', 'S', 'S']}
             fromMonth={new Date()}
-            disabledDays={[{ daysOfWeek: [0, 6] }]}
+            disabledDays={[{ daysOfWeek: [0, 6] }, ...disabledDays]}
             modifiers={{
               available: { daysOfWeek: [1, 2, 3, 4, 5] },
             }}

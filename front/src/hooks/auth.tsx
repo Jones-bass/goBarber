@@ -32,9 +32,11 @@ export const AuthProvider = ({ children }: IAuthContextData) => {
   const [data, setData] = useState<AuthState>(() => {
     const token = localStorage.getItem('@GoBarber:token')
     const userString = localStorage.getItem('@GoBarber:user') // Fix the key here
+
     if (token && userString) {
-      const user = JSON.parse(userString)
-      return { token, user }
+      api.defaults.headers.authorization = `Bearer ${token}`
+
+      return { token, user: JSON.parse(userString) }
     }
     return {} as AuthState
   })
@@ -42,8 +44,12 @@ export const AuthProvider = ({ children }: IAuthContextData) => {
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     const response = await api.post('sessions', { email, password })
     const { token, user } = response.data
+
     localStorage.setItem('@GoBarber:token', token)
     localStorage.setItem('@GoBarber:user', JSON.stringify(user))
+
+    api.defaults.headers.authorization = `Bearer ${token}`
+
     setData({ token, user })
   }, [])
 
